@@ -1,0 +1,15 @@
+name: blurhash
+description: Blurhash algorithm for dart.
+version: 0.1.0
+author: Agraphie <clemens.keppler@rwth-aachen.de>
+homepage: https://github.com/Agraphie/blurhash
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  test: ^1.9.2
