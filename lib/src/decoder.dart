@@ -1,7 +1,7 @@
 part of blurhash;
 
 /// Encoder class for the blur hash.
-class Encoder {
+class Decoder {
   /// Decode a given Base83 string into a Uint8List representing the image.
   static Uint8List decode(String blurHash, int width, int height,
       {double punch = 1.0}) {
@@ -28,7 +28,12 @@ class Encoder {
         colors[i] = _decodeAc(colorEnc, maxAc * punch);
       }
     }
-    return _composeBitmap(width, height, numCompX, numCompY, colors);
+    Uint8List bitmap =
+        _composeBitmap(width, height, numCompX, numCompY, colors);
+    _RGBA32BitmapHeader header =
+        _RGBA32BitmapHeader(bitmap.length, width, height);
+
+    return header.appendContent(bitmap);
   }
 
   /// Decode a given Base63 string into a dart:ui Image
@@ -36,12 +41,10 @@ class Encoder {
       {double punch = 1.0}) async {
     Uint8List list = decode(blurHash, width, height, punch: punch);
 
-    Completer<ui.Image> completer = Completer<ui.Image>();
-    ui.decodeImageFromPixels(list, width, height, ui.PixelFormat.rgba8888,
-        (ui.Image image) {
-      completer.complete(image);
-    });
-    return completer.future;
+    return ui
+        .instantiateImageCodec(list, targetWidth: width, targetHeight: height)
+        .then((ui.Codec c) => c.getNextFrame())
+        .then((ui.FrameInfo i) => i.image);
   }
 
   static List<double> _decodeDc(final int colorEnc) {
@@ -118,5 +121,44 @@ class Encoder {
       }
     }
     return list.buffer.asUint8List();
+  }
+}
+
+const int _RGBA32HeaderSize = 122;
+
+class _RGBA32BitmapHeader {
+  final int contentSize;
+  Uint8List headerIntList;
+
+  /// Create a new RGBA32 header
+  _RGBA32BitmapHeader(this.contentSize, int width, int height) {
+    final int fileLength = contentSize + _RGBA32HeaderSize;
+    headerIntList = Uint8List(fileLength);
+    headerIntList.buffer.asByteData()
+      ..setUint8(0x0, 0x42)
+      ..setUint8(0x1, 0x4d)
+      ..setInt32(0x2, fileLength, Endian.little)
+      ..setInt32(0xa, _RGBA32HeaderSize, Endian.little)
+      ..setUint32(0xe, 108, Endian.little)
+      ..setUint32(0x12, width, Endian.little)
+      ..setUint32(0x16, -height, Endian.little)
+      ..setUint16(0x1a, 1, Endian.little)
+      ..setUint32(0x1c, 32, Endian.little)
+      ..setUint32(0x1e, 3, Endian.little)
+      ..setUint32(0x22, contentSize, Endian.little)
+      ..setUint32(0x36, 0x000000ff, Endian.little)
+      ..setUint32(0x3a, 0x0000ff00, Endian.little)
+      ..setUint32(0x3e, 0x00ff0000, Endian.little)
+      ..setUint32(0x42, 0xff000000, Endian.little);
+  }
+
+  Uint8List appendContent(Uint8List contentIntList) {
+    headerIntList.setRange(
+      _RGBA32HeaderSize,
+      contentSize + _RGBA32HeaderSize,
+      contentIntList,
+    );
+
+    return headerIntList;
   }
 }

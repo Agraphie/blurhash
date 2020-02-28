@@ -1,5 +1,3 @@
-import 'dart:ui' as ui;
-
 import 'package:blurhash/blurhash.dart' as blurhash;
 import 'package:flutter/material.dart';
 
@@ -61,24 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   AnimatedOpacity(
                     opacity: _showBlur ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
-                    child: FutureBuilder<ui.Image>(
-                      future: blurhash.Encoder.decodeAsImage(hash, 300, 200),
-                      builder: (context, AsyncSnapshot<ui.Image> snapshot) {
-                        if (snapshot.hasData) {
-                          return CustomPaint(
-                            // Passing our generated blurry image
-                            painter: BlurhashPainter(image: snapshot.data),
-                            child: Container(
-                              width: 300,
-                              height: 200,
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          print(snapshot.error);
-                        }
-                        return Container();
-                      },
-                    ),
+                    child:
+                        Image.memory(blurhash.Decoder.decode(hash, 300, 200)),
                   ),
                 ],
               ),
@@ -94,21 +76,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-  }
-}
-
-class BlurhashPainter extends CustomPainter {
-  ui.Image image;
-
-  BlurhashPainter({this.image});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawImage(image, Offset.zero, Paint());
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }
