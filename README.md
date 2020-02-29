@@ -1,8 +1,8 @@
 # blurhash
 
-[Blurhash](https://github.com/woltapp/blurhash/blob/master/Algorithm.md) algorithm implementation for dart. For more information or other implementations go to https://github.com/woltapp/blurhash.
+This library is a [Blurhash](https://github.com/woltapp/blurhash/blob/master/Algorithm.md) algorithm implementation for dart. For more information or other implementations go to https://github.com/woltapp/blurhash.
 
-Instead of showing boring placeholders, just show an idea of the picture while the actual picture is loading! Images can be converted to Base83 on your backend or while uploading and send to the client. The client can then decode the Base83 string and draw the blurred image.
+Instead of showing boring placeholders, just show an idea of the picture while the actual picture is loading! Images can be converted to Base83 on your backend or while uploading in the frontend. Afterwards, you can send the Base83 string to your frontend. The client can then decode the Base83 string and draw the blurred image.
 
 |            | Original                         | Blurred                          |
 | ---------- |:------------------------------:| :-----------------------------:|
