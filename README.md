@@ -6,7 +6,7 @@ Instead of showing boring placeholders, just show an idea of the picture while t
 
 |            | Original                         | Blurred                          |
 | ---------- |:------------------------------:| :-----------------------------:|
-| **Image**  | <img src="resources/unsplash-image.jpg" alt="original" width="210" height=130/>             |<img src="resources/blurred.jpg" alt="original" width="255" height=130/> |
+| **Image**  | <img src="https://raw.githubusercontent.com/agraphie/blurhash/master/resources/unsplash-image.jpg" alt="original" width="210" height=130/>             |<img src="https://raw.githubusercontent.com/agraphie/blurhash/master/resources/blurred.jpg" alt="original" width="255" height=130/> |
 
 Based on the hash `q.NK3Mt7WrofayazbHj[l.TkCWBWCj[j@f6azIUWXjZWBWCjsoLayM{ofazayjZa#Wqj[kCWBj[bHWXj[jZWVt7WCs:ofa}axjZay`
 
